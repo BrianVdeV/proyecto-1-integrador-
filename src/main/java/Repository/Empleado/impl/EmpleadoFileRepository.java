@@ -2,9 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Repository.Usuario.impl;
+package Repository.Empleado.impl;
 
-import CodigoEstructura.peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.impl.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,29 +12,27 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
-
-import peter.unmsm.javabasico.sixcar.s.a.c.domain.Alarma;
-import peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.AlarmaRepository;
-
+import Domain.Empleado;
+import Repository.Empleado.EmpleadoRepository;
 /**
  *
- * @author Timothy
+ * 
  *
  * Implementa un CRUD (Create, Read, Update y Delete) basado en Arreglos para la
- * clase Alarma
+ * clase Empleado
  *
  *
  */
-public class AlarmaFileRepository implements AlarmaRepository {
+public class EmpleadoFileRepository implements EmpleadoRepository {
 
-    private static final String RUTA_ARCHIVO = "alarmas.txt";
+    private static final String RUTA_ARCHIVO = "empleado.txt";
     public static final int TAMANIO_INICIAL = 10;
-    private static Alarma[] alarmas = new Alarma[TAMANIO_INICIAL];
+    private static Empleado[] alarmas = new Empleado[TAMANIO_INICIAL];
     private static int size = 0;
-    private static int secuenciaId = 1;  // Variable estática para generar idAlarmaes
+    private static int secuenciaId = 1;  // Variable estática para generar idEmpleadoes
 
     // Constructor
-    public AlarmaFileRepository() {
+    public EmpleadoFileRepository() {
         loadFromFile();
     }
 
@@ -58,13 +55,11 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
                 String line = scanner.nextLine();
                 String[] fields = line.split("\\|");
-                Alarma alarma = new Alarma();
-                alarma.setIdAlarma(Integer.valueOf(fields[0]));
-                alarma.setMensaje(fields[1]);
-                alarma.setActivada(Boolean.parseBoolean(fields[2]));
-                alarmas[size++] = alarma;
-                if (secuenciaId <= alarma.getIdAlarma()) {
-                    secuenciaId = alarma.getIdAlarma() + 1;
+                Empleado empleado = new Empleado();
+                empleado.setIdEmpleado(Integer.valueOf(fields[0]));
+                alarmas[size++] = empleado;
+                if (secuenciaId <= empleado.getIdEmpleado()) {
+                    secuenciaId = empleado.getIdEmpleado() + 1;
                 }
             }
         } catch (Exception e) {
@@ -75,10 +70,8 @@ public class AlarmaFileRepository implements AlarmaRepository {
     private void saveToFile() { //try with resources //AutoCloseable
         try (PrintWriter out = new PrintWriter(new FileWriter(RUTA_ARCHIVO))) {
             for (int i = 0; i < size; i++) {
-                Alarma alarma = alarmas[i];
-                out.println(alarma.getIdAlarma() + "|"
-                        + alarma.getMensaje()+ "|"
-                        + alarma.isActivada());
+                Empleado empleado = alarmas[i];
+                out.println(empleado.getIdEmpleado());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,26 +80,26 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
     // CREATE
     @Override
-    public void create(Alarma alarma) {
+    public void create(Empleado empleado) {
         if (size == alarmas.length) {
             // Redimensionar el arreglo
-            Alarma[] nuevoArreglo = new Alarma[size * 2];
+            Empleado[] nuevoArreglo = new Empleado[size * 2];
             System.arraycopy(alarmas, 0, nuevoArreglo, 0, size);
             alarmas = nuevoArreglo;
         }
 
-        alarma.setIdAlarma(secuenciaId);  // Asignar el idAlarma automático
+        empleado.setIdEmpleado(secuenciaId);  // Asignar el idEmpleado automático
         secuenciaId++;  // Incrementar el contador para el próximo artículo
 
-        alarmas[size] = alarma;
+        alarmas[size] = empleado;
         size++;
         saveToFile();
     }
 
     @Override
-    public Alarma read(int idAlarma) {
+    public Empleado read(int idEmpleado) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
+            if (alarmas[i].getIdEmpleado().equals(idEmpleado)) {
                 return alarmas[i];
             }
         }
@@ -114,26 +107,26 @@ public class AlarmaFileRepository implements AlarmaRepository {
     }
 
     @Override
-    public Alarma[] readAll() {
-        Alarma[] activeArticles = new Alarma[size];
+    public Empleado[] readAll() {
+        Empleado[] activeArticles = new Empleado[size];
         System.arraycopy(alarmas, 0, activeArticles, 0, size);
         return activeArticles;
     }
 
     @Override
-    public Alarma[] readAllWithOrder(Comparator criterio) {
-        Alarma[] activeArticles = readAll();
+    public Empleado[] readAllWithOrder(Comparator criterio) {
+        Empleado[] activeArticles = readAll();
         Arrays.sort(activeArticles, criterio);
         return activeArticles;
     }
 
     // UPDATE
     @Override
-    public boolean update(int idAlarma, Alarma updatedAlarma) {
+    public boolean update(int idEmpleado, Empleado updatedEmpleado) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
-                updatedAlarma.setIdAlarma(idAlarma);
-                alarmas[i] = updatedAlarma;
+            if (alarmas[i].getIdEmpleado().equals(idEmpleado)) {
+                updatedEmpleado.setIdEmpleado(idEmpleado);
+                alarmas[i] = updatedEmpleado;
                 saveToFile();
                 return true;
             }
@@ -143,9 +136,9 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
     // DELETE
     @Override
-    public boolean delete(int idAlarma) {
+    public boolean delete(int idEmpleado) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
+            if (alarmas[i].getIdEmpleado().equals(idEmpleado)) {
                 // Desplazar los elementos restantes
                 System.arraycopy(alarmas, i + 1, alarmas, i, size - i - 1);
                 size--;

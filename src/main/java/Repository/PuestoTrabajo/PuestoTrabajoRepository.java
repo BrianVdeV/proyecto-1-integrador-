@@ -4,32 +4,29 @@
  */
 package Repository.PuestoTrabajo;
 
-import Repository.Empleado.*;
-import CodigoEstructura.peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.*;
 import java.util.Comparator;
-import peter.unmsm.javabasico.sixcar.s.a.c.domain.Alarma;
-
+import Domain.PuestoTrabajo;
 /**
  *
  * @author Timothy
  */
 public interface PuestoTrabajoRepository {
 
-    void create(Alarma alarma);
+    void create(PuestoTrabajo puestotrabajo);
 
-    Alarma read(int IdAlarma);
+    PuestoTrabajo read(int IdPuestoTrabajo);
 
-    Alarma[] readAll();
+    PuestoTrabajo[] readAll();
 
-    Alarma[] readAllWithOrder(Comparator criterio);
+    PuestoTrabajo[] readAllWithOrder(Comparator criterio);
 
-    boolean update(int IdAlarma, Alarma updatedAlarma);
+    boolean update(int IdPuestoTrabajo, PuestoTrabajo updatedPuestoTrabajo);
 
-    boolean delete(int IdAlarma);
+    boolean delete(int IdPuestoTrabajo);
     
     
     
-    default boolean delete2(int IdAlarma){
+    default boolean delete2(int IdPuestoTrabajo){
         return true;
     }
     

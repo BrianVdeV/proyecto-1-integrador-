@@ -3,33 +3,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Repository.TipoMascota;
-
-import Repository.Empleado.*;
-import CodigoEstructura.peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.*;
 import java.util.Comparator;
-import peter.unmsm.javabasico.sixcar.s.a.c.domain.Alarma;
-
+import Domain.TipoMascota;
 /**
  *
  * @author Timothy
  */
 public interface TipoMascotaRepository {
 
-    void create(Alarma alarma);
+    void create(TipoMascota tipomascota);
 
-    Alarma read(int IdAlarma);
+    TipoMascota read(int IdTipoMascota);
 
-    Alarma[] readAll();
+    TipoMascota[] readAll();
 
-    Alarma[] readAllWithOrder(Comparator criterio);
+    TipoMascota[] readAllWithOrder(Comparator criterio);
 
-    boolean update(int IdAlarma, Alarma updatedAlarma);
+    boolean update(int IdTipoMascota, TipoMascota updatedTipoMascota);
 
-    boolean delete(int IdAlarma);
+    boolean delete(int IdTipoMascota);
     
     
     
-    default boolean delete2(int IdAlarma){
+    default boolean delete2(int IdTipoMascota){
         return true;
     }
     

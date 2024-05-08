@@ -4,33 +4,29 @@
  */
 package Repository.Empleado;
 
-import CodigoEstructura.peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.*;
 import java.util.Comparator;
-import peter.unmsm.javabasico.sixcar.s.a.c.domain.Alarma;
+import Domain.Empleado;
 
 /**
  *
- * @author Timothy
+ *
  */
 public interface EmpleadoRepository {
 
-    void create(Alarma alarma);
+    void create(Empleado empleado);
 
-    Alarma read(int IdAlarma);
+    Empleado read(int IdEmpleado);
 
-    Alarma[] readAll();
+    Empleado[] readAll();
 
-    Alarma[] readAllWithOrder(Comparator criterio);
+    Empleado[] readAllWithOrder(Comparator criterio);
 
-    boolean update(int IdAlarma, Alarma updatedAlarma);
+    boolean update(int IdEmpleado, Empleado updatedAlarma);
 
-    boolean delete(int IdAlarma);
-    
-    
-    
-    default boolean delete2(int IdAlarma){
+    boolean delete(int IdEmpleado);
+
+    default boolean delete2(int IdEmpleado) {
         return true;
     }
-    
 
 }

@@ -4,32 +4,29 @@
  */
 package Repository.Marca;
 
-import Repository.Empleado.*;
-import CodigoEstructura.peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.*;
 import java.util.Comparator;
-import peter.unmsm.javabasico.sixcar.s.a.c.domain.Alarma;
-
+import Domain.Marca;
 /**
  *
  * @author Timothy
  */
 public interface MarcaRepository {
 
-    void create(Alarma alarma);
+    void create(Marca marca);
 
-    Alarma read(int IdAlarma);
+    Marca read(int IdMarca);
 
-    Alarma[] readAll();
+    Marca[] readAll();
 
-    Alarma[] readAllWithOrder(Comparator criterio);
+    Marca[] readAllWithOrder(Comparator criterio);
 
-    boolean update(int IdAlarma, Alarma updatedAlarma);
+    boolean update(int IdMarca, Marca updatedMarca);
 
-    boolean delete(int IdAlarma);
+    boolean delete(int IdMarca);
     
     
     
-    default boolean delete2(int IdAlarma){
+    default boolean delete2(int IdMarca){
         return true;
     }
     

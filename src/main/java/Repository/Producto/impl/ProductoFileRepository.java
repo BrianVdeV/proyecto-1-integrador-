@@ -2,9 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Repository.TipoMascota.impl;
+package Repository.Producto.impl;
 
-import CodigoEstructura.peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.impl.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,29 +12,28 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
-
-import peter.unmsm.javabasico.sixcar.s.a.c.domain.Alarma;
-import peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.AlarmaRepository;
+import Domain.Producto;
+import Repository.Producto.ProductoRepository;
 
 /**
  *
  * @author Timothy
  *
  * Implementa un CRUD (Create, Read, Update y Delete) basado en Arreglos para la
- * clase Alarma
+ * clase Producto
  *
  *
  */
-public class AlarmaFileRepository implements AlarmaRepository {
+public class ProductoFileRepository implements ProductoRepository {
 
-    private static final String RUTA_ARCHIVO = "alarmas.txt";
+    private static final String RUTA_ARCHIVO = "productos.txt";
     public static final int TAMANIO_INICIAL = 10;
-    private static Alarma[] alarmas = new Alarma[TAMANIO_INICIAL];
+    private static Producto[] productos = new Producto[TAMANIO_INICIAL];
     private static int size = 0;
-    private static int secuenciaId = 1;  // Variable estática para generar idAlarmaes
+    private static int secuenciaId = 1;  // Variable estática para generar idProductoes
 
     // Constructor
-    public AlarmaFileRepository() {
+    public ProductoFileRepository() {
         loadFromFile();
     }
 
@@ -52,19 +50,17 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
         try (Scanner scanner = new Scanner(file, StandardCharsets.UTF_8)) {
             while (scanner.hasNextLine()) {
-                if (size >= alarmas.length) {
-                    alarmas = Arrays.copyOf(alarmas, alarmas.length * 2);
+                if (size >= productos.length) {
+                    productos = Arrays.copyOf(productos, productos.length * 2);
                 }
 
                 String line = scanner.nextLine();
                 String[] fields = line.split("\\|");
-                Alarma alarma = new Alarma();
-                alarma.setIdAlarma(Integer.valueOf(fields[0]));
-                alarma.setMensaje(fields[1]);
-                alarma.setActivada(Boolean.parseBoolean(fields[2]));
-                alarmas[size++] = alarma;
-                if (secuenciaId <= alarma.getIdAlarma()) {
-                    secuenciaId = alarma.getIdAlarma() + 1;
+                Producto producto = new Producto();
+                producto.setIdProducto(Integer.valueOf(fields[0]));
+                productos[size++] = producto;
+                if (secuenciaId <= producto.getIdProducto()) {
+                    secuenciaId = producto.getIdProducto() + 1;
                 }
             }
         } catch (Exception e) {
@@ -75,10 +71,8 @@ public class AlarmaFileRepository implements AlarmaRepository {
     private void saveToFile() { //try with resources //AutoCloseable
         try (PrintWriter out = new PrintWriter(new FileWriter(RUTA_ARCHIVO))) {
             for (int i = 0; i < size; i++) {
-                Alarma alarma = alarmas[i];
-                out.println(alarma.getIdAlarma() + "|"
-                        + alarma.getMensaje()+ "|"
-                        + alarma.isActivada());
+                Producto producto = productos[i];
+                out.println(producto.getIdProducto());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,53 +81,53 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
     // CREATE
     @Override
-    public void create(Alarma alarma) {
-        if (size == alarmas.length) {
+    public void create(Producto producto) {
+        if (size == productos.length) {
             // Redimensionar el arreglo
-            Alarma[] nuevoArreglo = new Alarma[size * 2];
-            System.arraycopy(alarmas, 0, nuevoArreglo, 0, size);
-            alarmas = nuevoArreglo;
+            Producto[] nuevoArreglo = new Producto[size * 2];
+            System.arraycopy(productos, 0, nuevoArreglo, 0, size);
+            productos = nuevoArreglo;
         }
 
-        alarma.setIdAlarma(secuenciaId);  // Asignar el idAlarma automático
+        producto.setIdProducto(secuenciaId);  // Asignar el idProducto automático
         secuenciaId++;  // Incrementar el contador para el próximo artículo
 
-        alarmas[size] = alarma;
+        productos[size] = producto;
         size++;
         saveToFile();
     }
 
     @Override
-    public Alarma read(int idAlarma) {
+    public Producto read(int idProducto) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
-                return alarmas[i];
+            if (productos[i].getIdProducto().equals(idProducto)) {
+                return productos[i];
             }
         }
         return null;
     }
 
     @Override
-    public Alarma[] readAll() {
-        Alarma[] activeArticles = new Alarma[size];
-        System.arraycopy(alarmas, 0, activeArticles, 0, size);
+    public Producto[] readAll() {
+        Producto[] activeArticles = new Producto[size];
+        System.arraycopy(productos, 0, activeArticles, 0, size);
         return activeArticles;
     }
 
     @Override
-    public Alarma[] readAllWithOrder(Comparator criterio) {
-        Alarma[] activeArticles = readAll();
+    public Producto[] readAllWithOrder(Comparator criterio) {
+        Producto[] activeArticles = readAll();
         Arrays.sort(activeArticles, criterio);
         return activeArticles;
     }
 
     // UPDATE
     @Override
-    public boolean update(int idAlarma, Alarma updatedAlarma) {
+    public boolean update(int idProducto, Producto updatedProducto) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
-                updatedAlarma.setIdAlarma(idAlarma);
-                alarmas[i] = updatedAlarma;
+            if (productos[i].getIdProducto().equals(idProducto)) {
+                updatedProducto.setIdProducto(idProducto);
+                productos[i] = updatedProducto;
                 saveToFile();
                 return true;
             }
@@ -143,11 +137,11 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
     // DELETE
     @Override
-    public boolean delete(int idAlarma) {
+    public boolean delete(int idProducto) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
+            if (productos[i].getIdProducto().equals(idProducto)) {
                 // Desplazar los elementos restantes
-                System.arraycopy(alarmas, i + 1, alarmas, i, size - i - 1);
+                System.arraycopy(productos, i + 1, productos, i, size - i - 1);
                 size--;
                 saveToFile();
                 return true;

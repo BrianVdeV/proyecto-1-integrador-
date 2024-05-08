@@ -4,7 +4,6 @@
  */
 package Repository.Marca.impl;
 
-import CodigoEstructura.peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.impl.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,28 +13,28 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
 
-import peter.unmsm.javabasico.sixcar.s.a.c.domain.Alarma;
-import peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.AlarmaRepository;
+import Domain.Marca;
+import Repository.Marca.MarcaRepository;
 
 /**
  *
  * @author Timothy
  *
  * Implementa un CRUD (Create, Read, Update y Delete) basado en Arreglos para la
- * clase Alarma
+ * clase Marca
  *
  *
  */
-public class AlarmaFileRepository implements AlarmaRepository {
+public class MarcaFileRepository implements MarcaRepository {
 
-    private static final String RUTA_ARCHIVO = "alarmas.txt";
+    private static final String RUTA_ARCHIVO = "marcas.txt";
     public static final int TAMANIO_INICIAL = 10;
-    private static Alarma[] alarmas = new Alarma[TAMANIO_INICIAL];
+    private static Marca[] marcas = new Marca[TAMANIO_INICIAL];
     private static int size = 0;
-    private static int secuenciaId = 1;  // Variable estática para generar idAlarmaes
+    private static int secuenciaId = 1;  // Variable estática para generar idMarcaes
 
     // Constructor
-    public AlarmaFileRepository() {
+    public MarcaFileRepository() {
         loadFromFile();
     }
 
@@ -52,19 +51,17 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
         try (Scanner scanner = new Scanner(file, StandardCharsets.UTF_8)) {
             while (scanner.hasNextLine()) {
-                if (size >= alarmas.length) {
-                    alarmas = Arrays.copyOf(alarmas, alarmas.length * 2);
+                if (size >= marcas.length) {
+                    marcas = Arrays.copyOf(marcas, marcas.length * 2);
                 }
 
                 String line = scanner.nextLine();
                 String[] fields = line.split("\\|");
-                Alarma alarma = new Alarma();
-                alarma.setIdAlarma(Integer.valueOf(fields[0]));
-                alarma.setMensaje(fields[1]);
-                alarma.setActivada(Boolean.parseBoolean(fields[2]));
-                alarmas[size++] = alarma;
-                if (secuenciaId <= alarma.getIdAlarma()) {
-                    secuenciaId = alarma.getIdAlarma() + 1;
+                Marca marca = new Marca();
+                marca.setIdMarca(Integer.valueOf(fields[0]));
+                marcas[size++] = marca;
+                if (secuenciaId <= marca.getIdMarca()) {
+                    secuenciaId = marca.getIdMarca() + 1;
                 }
             }
         } catch (Exception e) {
@@ -75,10 +72,8 @@ public class AlarmaFileRepository implements AlarmaRepository {
     private void saveToFile() { //try with resources //AutoCloseable
         try (PrintWriter out = new PrintWriter(new FileWriter(RUTA_ARCHIVO))) {
             for (int i = 0; i < size; i++) {
-                Alarma alarma = alarmas[i];
-                out.println(alarma.getIdAlarma() + "|"
-                        + alarma.getMensaje()+ "|"
-                        + alarma.isActivada());
+                Marca marca = marcas[i];
+                out.println(marca.getIdMarca());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,53 +82,53 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
     // CREATE
     @Override
-    public void create(Alarma alarma) {
-        if (size == alarmas.length) {
+    public void create(Marca marca) {
+        if (size == marcas.length) {
             // Redimensionar el arreglo
-            Alarma[] nuevoArreglo = new Alarma[size * 2];
-            System.arraycopy(alarmas, 0, nuevoArreglo, 0, size);
-            alarmas = nuevoArreglo;
+            Marca[] nuevoArreglo = new Marca[size * 2];
+            System.arraycopy(marcas, 0, nuevoArreglo, 0, size);
+            marcas = nuevoArreglo;
         }
 
-        alarma.setIdAlarma(secuenciaId);  // Asignar el idAlarma automático
+        marca.setIdMarca(secuenciaId);  // Asignar el idMarca automático
         secuenciaId++;  // Incrementar el contador para el próximo artículo
 
-        alarmas[size] = alarma;
+        marcas[size] = marca;
         size++;
         saveToFile();
     }
 
     @Override
-    public Alarma read(int idAlarma) {
+    public Marca read(int idMarca) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
-                return alarmas[i];
+            if (marcas[i].getIdMarca().equals(idMarca)) {
+                return marcas[i];
             }
         }
         return null;
     }
 
     @Override
-    public Alarma[] readAll() {
-        Alarma[] activeArticles = new Alarma[size];
-        System.arraycopy(alarmas, 0, activeArticles, 0, size);
+    public Marca[] readAll() {
+        Marca[] activeArticles = new Marca[size];
+        System.arraycopy(marcas, 0, activeArticles, 0, size);
         return activeArticles;
     }
 
     @Override
-    public Alarma[] readAllWithOrder(Comparator criterio) {
-        Alarma[] activeArticles = readAll();
+    public Marca[] readAllWithOrder(Comparator criterio) {
+        Marca[] activeArticles = readAll();
         Arrays.sort(activeArticles, criterio);
         return activeArticles;
     }
 
     // UPDATE
     @Override
-    public boolean update(int idAlarma, Alarma updatedAlarma) {
+    public boolean update(int idMarca, Marca updatedMarca) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
-                updatedAlarma.setIdAlarma(idAlarma);
-                alarmas[i] = updatedAlarma;
+            if (marcas[i].getIdMarca().equals(idMarca)) {
+                updatedMarca.setIdMarca(idMarca);
+                marcas[i] = updatedMarca;
                 saveToFile();
                 return true;
             }
@@ -143,11 +138,11 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
     // DELETE
     @Override
-    public boolean delete(int idAlarma) {
+    public boolean delete(int idMarca) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
+            if (marcas[i].getIdMarca().equals(idMarca)) {
                 // Desplazar los elementos restantes
-                System.arraycopy(alarmas, i + 1, alarmas, i, size - i - 1);
+                System.arraycopy(marcas, i + 1, marcas, i, size - i - 1);
                 size--;
                 saveToFile();
                 return true;
