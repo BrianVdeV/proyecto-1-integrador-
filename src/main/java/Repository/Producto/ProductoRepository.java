@@ -4,32 +4,29 @@
  */
 package Repository.Producto;
 
-import Repository.Empleado.*;
-import CodigoEstructura.peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.*;
 import java.util.Comparator;
-import peter.unmsm.javabasico.sixcar.s.a.c.domain.Alarma;
-
+import Domain.Producto;
 /**
  *
- * @author Timothy
+ * 
  */
 public interface ProductoRepository {
 
-    void create(Alarma alarma);
+    void create(Producto producto);
 
-    Alarma read(int IdAlarma);
+    Producto read(int IdProducto);
 
-    Alarma[] readAll();
+    Producto[] readAll();
 
-    Alarma[] readAllWithOrder(Comparator criterio);
+    Producto[] readAllWithOrder(Comparator criterio);
 
-    boolean update(int IdAlarma, Alarma updatedAlarma);
+    boolean update(int IdProducto, Producto updatedProducto);
 
-    boolean delete(int IdAlarma);
+    boolean delete(int IdProducto);
     
     
     
-    default boolean delete2(int IdAlarma){
+    default boolean delete2(int IdProducto){
         return true;
     }
     

@@ -19,11 +19,11 @@ public class TipoMascota implements Comparable<TipoMascota>{
     private String mascota;
     
     //getters and setters
-    public Integer getTipoMascota() {
+    public Integer getIdTipoMascota() {
         return idTipoMascota;
     }
 
-    public void setTipoMascota(Integer idTipoMascota) {
+    public void setIdTipoMascota(Integer idTipoMascota) {
         this.idTipoMascota = idTipoMascota;
     }
 

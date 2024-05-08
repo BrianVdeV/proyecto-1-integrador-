@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Repository.Usuario.impl;
+package Repository.TipoMascota.impl;
 
 import CodigoEstructura.peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.impl.*;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ import peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.AlarmaRepository;
  *
  *
  */
-public class AlarmaArrayRepository implements AlarmaRepository {
+public class TipoMascotaArrayRepository implements AlarmaRepository {
 
     
     public static final int TAMANIO_INICIAL = 10;

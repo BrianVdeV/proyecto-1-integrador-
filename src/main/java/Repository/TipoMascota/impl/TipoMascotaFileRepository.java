@@ -2,9 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Repository.Empleado.impl;
-
-import CodigoEstructura.peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.impl.*;
+package Repository.TipoMascota.impl;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,29 +11,27 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
-
-import peter.unmsm.javabasico.sixcar.s.a.c.domain.Alarma;
-import peter.unmsm.javabasico.sixcar.s.a.c.repository.alarma.AlarmaRepository;
-
+import Domain.TipoMascota;
+import Repository.TipoMascota.TipoMascotaRepository;
 /**
  *
- * @author Timothy
+ * 
  *
  * Implementa un CRUD (Create, Read, Update y Delete) basado en Arreglos para la
- * clase Alarma
+ * clase TipoMascota
  *
  *
  */
-public class AlarmaFileRepository implements AlarmaRepository {
+public class TipoMascotaFileRepository implements TipoMascotaRepository {
 
-    private static final String RUTA_ARCHIVO = "alarmas.txt";
+    private static final String RUTA_ARCHIVO = "tipomascotas.txt";
     public static final int TAMANIO_INICIAL = 10;
-    private static Alarma[] alarmas = new Alarma[TAMANIO_INICIAL];
+    private static TipoMascota[] tipomascotas = new TipoMascota[TAMANIO_INICIAL];
     private static int size = 0;
-    private static int secuenciaId = 1;  // Variable estática para generar idAlarmaes
+    private static int secuenciaId = 1;  // Variable estática para generar idTipoMascotaes
 
     // Constructor
-    public AlarmaFileRepository() {
+    public TipoMascotaFileRepository() {
         loadFromFile();
     }
 
@@ -52,19 +48,17 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
         try (Scanner scanner = new Scanner(file, StandardCharsets.UTF_8)) {
             while (scanner.hasNextLine()) {
-                if (size >= alarmas.length) {
-                    alarmas = Arrays.copyOf(alarmas, alarmas.length * 2);
+                if (size >= tipomascotas.length) {
+                    tipomascotas = Arrays.copyOf(tipomascotas, tipomascotas.length * 2);
                 }
 
                 String line = scanner.nextLine();
                 String[] fields = line.split("\\|");
-                Alarma alarma = new Alarma();
-                alarma.setIdAlarma(Integer.valueOf(fields[0]));
-                alarma.setMensaje(fields[1]);
-                alarma.setActivada(Boolean.parseBoolean(fields[2]));
-                alarmas[size++] = alarma;
-                if (secuenciaId <= alarma.getIdAlarma()) {
-                    secuenciaId = alarma.getIdAlarma() + 1;
+                TipoMascota tipomascota = new TipoMascota();
+                tipomascota.setIdTipoMascota(Integer.valueOf(fields[0]));
+                tipomascotas[size++] = tipomascota;
+                if (secuenciaId <= tipomascota.getIdTipoMascota()) {
+                    secuenciaId = tipomascota.getIdTipoMascota() + 1;
                 }
             }
         } catch (Exception e) {
@@ -75,10 +69,8 @@ public class AlarmaFileRepository implements AlarmaRepository {
     private void saveToFile() { //try with resources //AutoCloseable
         try (PrintWriter out = new PrintWriter(new FileWriter(RUTA_ARCHIVO))) {
             for (int i = 0; i < size; i++) {
-                Alarma alarma = alarmas[i];
-                out.println(alarma.getIdAlarma() + "|"
-                        + alarma.getMensaje()+ "|"
-                        + alarma.isActivada());
+                TipoMascota tipomascota = tipomascotas[i];
+                out.println(tipomascota.getIdTipoMascota());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,53 +79,53 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
     // CREATE
     @Override
-    public void create(Alarma alarma) {
-        if (size == alarmas.length) {
+    public void create(TipoMascota tipomascota) {
+        if (size == tipomascotas.length) {
             // Redimensionar el arreglo
-            Alarma[] nuevoArreglo = new Alarma[size * 2];
-            System.arraycopy(alarmas, 0, nuevoArreglo, 0, size);
-            alarmas = nuevoArreglo;
+            TipoMascota[] nuevoArreglo = new TipoMascota[size * 2];
+            System.arraycopy(tipomascotas, 0, nuevoArreglo, 0, size);
+            tipomascotas = nuevoArreglo;
         }
 
-        alarma.setIdAlarma(secuenciaId);  // Asignar el idAlarma automático
+        tipomascota.setIdTipoMascota(secuenciaId);  // Asignar el idTipoMascota automático
         secuenciaId++;  // Incrementar el contador para el próximo artículo
 
-        alarmas[size] = alarma;
+        tipomascotas[size] = tipomascota;
         size++;
         saveToFile();
     }
 
     @Override
-    public Alarma read(int idAlarma) {
+    public TipoMascota read(int idTipoMascota) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
-                return alarmas[i];
+            if (tipomascotas[i].getIdTipoMascota().equals(idTipoMascota)) {
+                return tipomascotas[i];
             }
         }
         return null;
     }
 
     @Override
-    public Alarma[] readAll() {
-        Alarma[] activeArticles = new Alarma[size];
-        System.arraycopy(alarmas, 0, activeArticles, 0, size);
+    public TipoMascota[] readAll() {
+        TipoMascota[] activeArticles = new TipoMascota[size];
+        System.arraycopy(tipomascotas, 0, activeArticles, 0, size);
         return activeArticles;
     }
 
     @Override
-    public Alarma[] readAllWithOrder(Comparator criterio) {
-        Alarma[] activeArticles = readAll();
+    public TipoMascota[] readAllWithOrder(Comparator criterio) {
+        TipoMascota[] activeArticles = readAll();
         Arrays.sort(activeArticles, criterio);
         return activeArticles;
     }
 
     // UPDATE
     @Override
-    public boolean update(int idAlarma, Alarma updatedAlarma) {
+    public boolean update(int idTipoMascota, TipoMascota updatedTipoMascota) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
-                updatedAlarma.setIdAlarma(idAlarma);
-                alarmas[i] = updatedAlarma;
+            if (tipomascotas[i].getIdTipoMascota().equals(idTipoMascota)) {
+                updatedTipoMascota.setIdTipoMascota(idTipoMascota);
+                tipomascotas[i] = updatedTipoMascota;
                 saveToFile();
                 return true;
             }
@@ -143,11 +135,11 @@ public class AlarmaFileRepository implements AlarmaRepository {
 
     // DELETE
     @Override
-    public boolean delete(int idAlarma) {
+    public boolean delete(int idTipoMascota) {
         for (int i = 0; i < size; i++) {
-            if (alarmas[i].getIdAlarma().equals(idAlarma)) {
+            if (tipomascotas[i].getIdTipoMascota().equals(idTipoMascota)) {
                 // Desplazar los elementos restantes
-                System.arraycopy(alarmas, i + 1, alarmas, i, size - i - 1);
+                System.arraycopy(tipomascotas, i + 1, tipomascotas, i, size - i - 1);
                 size--;
                 saveToFile();
                 return true;
